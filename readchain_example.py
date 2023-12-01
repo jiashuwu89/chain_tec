@@ -6,7 +6,8 @@ import os
 from chain_data import *
 
 THEMIS_FOLDER = "themis"
-THEMIS_FILE = "themis_chain_2014_updated.csv"
+#THEMIS_FILE = "themis_chain_2014.csv"
+THEMIS_FILE = "themis_chain_2014_2023_short.csv"
 DOWNLOAD_FLG = True
 
 
@@ -45,15 +46,17 @@ def themis_chain_map(start_time: str, end_time: str, station: str, themis_id: st
     end_time_dt = datetime.strptime(end_time, '%Y-%m-%d/%H:%M:%S')
 
     filenames = []
-    current_time = start_time_dt
+    current_time = datetime(start_time_dt.year, start_time_dt.month, start_time_dt.day, start_time_dt.hour, 0, 0)
     filenames_backup = []
+
     while current_time <= end_time_dt:
         filename = current_time.strftime(f'{station}c-%y%m%d-%H.ismr')
         filenames.append(filename)
-        current_time +=  timedelta(hours=1)
-        hour_str = chr(current_time.hour + 97 - 1)
+        
+        hour_str = chr(current_time.hour + 97)
         julian_day_str = current_time.strftime("%y%j")
         filenames_backup.append(f"{station}c{julian_day_str}{hour_str}.ismr")
+        current_time +=  timedelta(hours=1)
 
     # get outputname 
     start_time_str = start_time.replace('-','').replace('/','_').replace(':','')
@@ -65,7 +68,7 @@ def themis_chain_map(start_time: str, end_time: str, station: str, themis_id: st
 
 if __name__ == "__main__":
     themis_data = read_themis(THEMIS_FILE)
-    themis_data_filter = filter_themis(themis_data, quality=2)
+    themis_data_filter = filter_themis(themis_data, quality=3)
 
     for index, row in themis_data_filter.iterrows():
         chain_filenames, outputname, chain_filenames_backup = themis_chain_map(row['start_time'], row['end_time'], row['station'], row['themis_id'])

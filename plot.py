@@ -13,6 +13,7 @@ def plot_series(ax, x, y, label, ylabel, color):
     ax.tick_params(axis='both', which='major', labelsize=FONTSIZE)
     ax.yaxis.set_major_locator(ticker.MaxNLocator(nbins=5))
     ax.xaxis.set_major_formatter(DATE_FORMAT)
+    ax.set_xlim([x[0], x[-1]])
 
 def plot_chain(df, elev_select, outputname):
     """
