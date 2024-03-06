@@ -2,3 +2,6 @@
 chain/*
 figure/*
 themis/*
+.DS_Store
+__pycache__/*
+*.log
